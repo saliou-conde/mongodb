@@ -16,6 +16,6 @@ public interface CustomerRepository extends MongoRepository<Customer, String> {
     //List<Customer> findCustomerByAgeBetween(Integer minAge, Integer maxAge);
 
     @Query(value = "{'age' : {$gt : ?0, $lt : ?1}}",
-    fields = "{address: 0}")
+    fields = "{address: 0}")//Address object will be displayed an 'null'
     List<Customer> findCustomerByAgeBetween(Integer minAge, Integer maxAge);
 }
