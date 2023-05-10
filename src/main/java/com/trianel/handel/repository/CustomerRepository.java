@@ -11,9 +11,9 @@ import java.util.Optional;
 @Repository
 public interface CustomerRepository extends MongoRepository<Customer, String> {
 
-    Optional<Customer> findStudentByEmail(String email);
+    Optional<Customer> findCustomerByEmail(String email);
 
-    //List<Customer> findCustomerByAgeBetween(Integer minAge, Integer maxAge);
+    Optional<Customer> findCustomerByCustomerId(String customerId);
 
     @Query(value = "{'age' : {$gt : ?0, $lt : ?1}}",
     fields = "{address: 0}")//Address will be displayed as 'null' object in the json response body

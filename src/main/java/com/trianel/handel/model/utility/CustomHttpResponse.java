@@ -3,14 +3,18 @@ package com.trianel.handel.model.utility;
 import com.fasterxml.jackson.annotation.JsonFormat;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.trianel.handel.model.dto.CustomerDto;
+import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
+import lombok.NoArgsConstructor;
 import org.springframework.http.HttpStatus;
 
 import java.time.LocalDateTime;
 
 @Builder
 @Data
+@AllArgsConstructor
+@NoArgsConstructor
 public class CustomHttpResponse {
 
     @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "MM-dd-yyyy HH:mm.ss", timezone = "Europe/Paris")

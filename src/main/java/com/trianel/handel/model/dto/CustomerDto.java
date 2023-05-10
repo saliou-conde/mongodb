@@ -4,15 +4,20 @@ import com.fasterxml.jackson.annotation.JsonProperty;
 import com.trianel.handel.model.utility.Address;
 import com.trianel.handel.model.Customer;
 import com.trianel.handel.model.utility.Gender;
+import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
+import lombok.NoArgsConstructor;
 
 import java.util.UUID;
 
 @Data
 @Builder
+@AllArgsConstructor
+@NoArgsConstructor
 public class CustomerDto {
 
+    private String customerId;
     private String firstname;
     private String lastname;
     private String email;
@@ -23,9 +28,10 @@ public class CustomerDto {
     private Boolean active;
     private Integer age;
 
-    public static CustomerDto mapStudentToStudentDto(Customer customer) {
+    public static CustomerDto mapCustomerToCustomerDto(Customer customer) {
         return CustomerDto
                 .builder()
+                .customerId(customer.getCustomerId())
                 .active(customer.getActive())
                 .address(customer.getAddress())
                 .age(customer.getAge())
@@ -36,10 +42,10 @@ public class CustomerDto {
                 .build();
     }
 
-    public Customer mapStudentDtoToStudent(CustomerDto requestDTO) {
+    public Customer mapCustomerDtoToCustomer(CustomerDto requestDTO) {
         Customer customer = Customer
                 .builder()
-                .customerId(UUID.randomUUID().toString())
+                .customerId(customerId == null ? UUID.randomUUID().toString() : customerId)
                 .address(requestDTO.address)
                 .email(requestDTO.email)
                 .gender(requestDTO.gender)

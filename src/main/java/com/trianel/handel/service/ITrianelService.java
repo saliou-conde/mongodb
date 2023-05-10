@@ -1,23 +1,22 @@
 package com.trianel.handel.service;
 
-import com.trianel.handel.model.dto.CustomerLogin;
+import com.trianel.handel.model.dto.LoginDto;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
-import org.springframework.data.mongodb.core.mapping.Document;
 
 import java.util.List;
 
 public interface ITrianelService<T> {
 
-    T add(T student);
+    T addEntity(T entity);
 
-    List<T> getAllCustomers();
+    T updateEntity(Object o, T entity);
 
-    T authenticate(CustomerLogin login);
+    List<T> getAllEntities();
 
-    List<T> findCustomerByAgeBetween(Integer minAge, Integer maxAge);
+    T authenticate(LoginDto login);
 
     Page<T> searchCustomer(String name, Integer minAge, Integer maxAge, String city, Pageable pageable);
 
-    List<Document> getOldestCustomerByCity();
+    Boolean deleteEntity(Object o);
 }

@@ -1,11 +1,15 @@
 package com.trianel.handel.model.dto;
 
+import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
+import lombok.NoArgsConstructor;
 
 @Data
 @Builder
-public class CustomerLogin {
+@AllArgsConstructor
+@NoArgsConstructor
+public class LoginDto {
     private String username;
     private String password;
 }
