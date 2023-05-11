@@ -38,9 +38,9 @@ public class TrianelServiceImpl implements ITrianelService<CustomerDto> {
 
     @Override
     public CustomerDto addEntity(CustomerDto requestDTO) {
-        String email = requestDTO.getEmail();
-        Customer customer      = requestDTO.mapCustomerDtoToCustomer(requestDTO);
-        ValidationResult apply = CustomerValidator
+        String email            = requestDTO.getEmail();
+        Customer customer       = requestDTO.mapCustomerDtoToCustomer(requestDTO);
+        ValidationResult apply  = CustomerValidator
                 .isCustomerEmailValid()
                 .and(CustomerValidator.customerEmailAlreadyInUser(email))
                 .apply(customer);
@@ -82,9 +82,9 @@ public class TrianelServiceImpl implements ITrianelService<CustomerDto> {
     @Override
     public CustomerDto authenticate(LoginDto login) {
         String email = login.getUsername();
-        Customer customer                  = findCustomerByEmail(email).orElse(null);
-        ValidationResult customerValidator = validateCustomer(customer, login.getPassword());
-        if(customerValidator               == ValidationResult.VALID) {
+        Customer customer                   = findCustomerByEmail(email).orElse(null);
+        ValidationResult customerValidator  = validateCustomer(customer, login.getPassword());
+        if(customerValidator == ValidationResult.VALID) {
             assert customer != null;
             return CustomerDto.mapCustomerToCustomerDto(customer);
         }
