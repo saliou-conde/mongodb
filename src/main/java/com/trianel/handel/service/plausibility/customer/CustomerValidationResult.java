@@ -1,4 +1,4 @@
-package com.trianel.handel.service.plausibility;
+package com.trianel.handel.service.plausibility.customer;
 
 public enum CustomerValidationResult {
 

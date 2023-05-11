@@ -1,10 +1,10 @@
-package com.trianel.handel.service.plausibility;
+package com.trianel.handel.service.plausibility.customer;
 
 import com.trianel.handel.model.Customer;
 
 import java.util.function.Function;
 
-import static com.trianel.handel.service.plausibility.CustomerValidationResult.*;
+import static com.trianel.handel.service.plausibility.customer.CustomerValidationResult.*;
 
 
 public interface CustomerValidator extends Function<Customer, CustomerValidationResult> {

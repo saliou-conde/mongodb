@@ -31,10 +31,11 @@ public class SpotOrderDto {
 
 
     public static SpotOrder mapSpotOrderToSpotOrderDto(SpotOrderDto spotOrder) {
+        boolean isTimestampNull = spotOrder.timestamp == null;
         return SpotOrder.builder()
                 .orderId(spotOrder.getOrderId())
                 .quantity(spotOrder.getQuantity())
-                .timestamp(LocalDateTime.now())
+                .timestamp(isTimestampNull ? LocalDateTime.now() : spotOrder.timestamp)
                 .customer(spotOrder.getCustomer())
                 .build();
     }

@@ -5,8 +5,8 @@ import com.trianel.handel.model.dto.customer.CustomerDto;
 import com.trianel.handel.model.dto.customer.LoginDto;
 import com.trianel.handel.repository.CustomerRepository;
 import com.trianel.handel.service.ITrianelService;
-import com.trianel.handel.service.plausibility.CustomerValidator;
-import com.trianel.handel.service.plausibility.CustomerValidationResult;
+import com.trianel.handel.service.plausibility.customer.CustomerValidator;
+import com.trianel.handel.service.plausibility.customer.CustomerValidationResult;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.domain.Page;
@@ -23,7 +23,7 @@ import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collectors;
 
-import static com.trianel.handel.service.plausibility.CustomerValidationResult.VALID;
+import static com.trianel.handel.service.plausibility.customer.CustomerValidationResult.VALID;
 
 @Service
 @RequiredArgsConstructor
