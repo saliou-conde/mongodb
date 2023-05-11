@@ -19,5 +19,5 @@ public class SystemA {
     @Id
     private String systemAID;
     private String name;
-    private List<Transaction> transactions;
+    private List<TrianelTransaction> trianelTransactions;
 }

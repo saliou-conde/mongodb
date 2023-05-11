@@ -1,6 +1,6 @@
 package com.trianel.handel.service;
 
-import com.trianel.handel.model.dto.LoginDto;
+import com.trianel.handel.model.dto.customer.LoginDto;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 
@@ -14,9 +14,13 @@ public interface ITrianelService<T> {
 
     List<T> getAllEntities();
 
-    T authenticate(LoginDto login);
-
-    Page<T> searchCustomer(String name, Integer minAge, Integer maxAge, String city, Pageable pageable);
-
     Boolean deleteEntity(Object o);
+
+    default T authenticate(LoginDto login) {
+        return null;
+    }
+
+    default Page<T> searchCustomer(String name, Integer min, Integer max, String city, Pageable pageable) {
+        return null;
+    }
 }

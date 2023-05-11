@@ -1,4 +1,4 @@
-package com.trianel.handel.model.dto;
+package com.trianel.handel.model.dto.customer;
 
 import lombok.AllArgsConstructor;
 import lombok.Builder;

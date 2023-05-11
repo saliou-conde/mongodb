@@ -1,7 +1,7 @@
 package com.trianel.handel.controller;
 
-import com.trianel.handel.model.dto.CustomerDto;
-import com.trianel.handel.model.dto.LoginDto;
+import com.trianel.handel.model.dto.customer.CustomerDto;
+import com.trianel.handel.model.dto.customer.LoginDto;
 import com.trianel.handel.model.utility.CustomHttpResponse;
 import com.trianel.handel.model.utility.CustomHttpResponseUtility;
 import com.trianel.handel.service.ITrianelService;
@@ -35,7 +35,8 @@ public class CustomerController {
     @PostMapping("/login")
     public ResponseEntity<CustomHttpResponse> authenticateCustomer(@RequestBody LoginDto login) {
         service.authenticate(login);
-        return CustomHttpResponseUtility.getInstance().customHttpResponse(HttpStatus.OK, "Customer Successfully authenticated");
+        return CustomHttpResponseUtility.getInstance().customHttpResponse(HttpStatus.OK,
+                "Customer Successfully authenticated");
     }
 
     @GetMapping("/search")
@@ -57,7 +58,8 @@ public class CustomerController {
     }
 
     @PutMapping("/{customerId}")
-    public ResponseEntity<CustomerDto> updateCustomer(@PathVariable("customerId") String customerId, @RequestBody CustomerDto requestDTO) {
+    public ResponseEntity<CustomerDto> updateCustomer(@PathVariable("customerId") String customerId,
+                                                      @RequestBody CustomerDto requestDTO) {
         return ResponseEntity.ok(service.updateEntity(customerId, requestDTO));
     }
 }

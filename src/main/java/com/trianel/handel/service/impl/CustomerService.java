@@ -1,12 +1,12 @@
 package com.trianel.handel.service.impl;
 
 import com.trianel.handel.model.Customer;
-import com.trianel.handel.model.dto.CustomerDto;
-import com.trianel.handel.model.dto.LoginDto;
+import com.trianel.handel.model.dto.customer.CustomerDto;
+import com.trianel.handel.model.dto.customer.LoginDto;
 import com.trianel.handel.repository.CustomerRepository;
 import com.trianel.handel.service.ITrianelService;
 import com.trianel.handel.service.plausibility.CustomerValidator;
-import com.trianel.handel.service.plausibility.ValidationResult;
+import com.trianel.handel.service.plausibility.CustomerValidationResult;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.domain.Page;
@@ -23,10 +23,12 @@ import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collectors;
 
+import static com.trianel.handel.service.plausibility.CustomerValidationResult.VALID;
+
 @Service
 @RequiredArgsConstructor
 @Slf4j
-public class TrianelServiceImpl implements ITrianelService<CustomerDto> {
+public class CustomerService implements ITrianelService<CustomerDto> {
 
     private final CustomerRepository repository;
     private final MongoTemplate template;
@@ -38,14 +40,20 @@ public class TrianelServiceImpl implements ITrianelService<CustomerDto> {
 
     @Override
     public CustomerDto addEntity(CustomerDto requestDTO) {
-        String email            = requestDTO.getEmail();
-        Customer customer       = requestDTO.mapCustomerDtoToCustomer(requestDTO);
-        ValidationResult apply  = CustomerValidator
+        Customer customer               = requestDTO.mapCustomerDtoToCustomer(requestDTO);
+        CustomerValidationResult apply  = CustomerValidator
                 .isCustomerEmailValid()
-                .and(CustomerValidator.customerEmailAlreadyInUser(email))
                 .apply(customer);
         log.info("ValidationResult: {}", apply);
-        if(apply == ValidationResult.VALID) {
+        if(apply == VALID) {
+            String email                        = requestDTO.getEmail();
+            Optional<Customer> customerByEmail  = findCustomerByEmail(email);
+            if(customerByEmail.isPresent()) {
+                apply = CustomerValidator.customerEmailAlreadyInUser(email).apply(customerByEmail.get());
+                if(apply != VALID) {
+                    throw new RuntimeException(apply.getDescription());
+                }
+            }
             assert customer != null;
             Customer insert = repository.insert(customer);
             return CustomerDto.mapCustomerToCustomerDto(insert);
@@ -56,12 +64,12 @@ public class TrianelServiceImpl implements ITrianelService<CustomerDto> {
     @Override
     public CustomerDto updateEntity(Object object, CustomerDto requestDTO) {
         Customer customer      = requestDTO.mapCustomerDtoToCustomer(requestDTO);
-        ValidationResult apply = CustomerValidator
+        CustomerValidationResult apply = CustomerValidator
                 .findCustomerByID(object.toString())
                 .and(CustomerValidator.isCustomerEmailValid())
                 .apply(customer);
         log.info("ValidationResult: {}", apply);
-        if(apply == ValidationResult.VALID) {
+        if(apply == VALID) {
             assert customer != null;
             Customer insert = repository.save(customer);
             return CustomerDto.mapCustomerToCustomerDto(insert);
@@ -83,8 +91,8 @@ public class TrianelServiceImpl implements ITrianelService<CustomerDto> {
     public CustomerDto authenticate(LoginDto login) {
         String email = login.getUsername();
         Customer customer                   = findCustomerByEmail(email).orElse(null);
-        ValidationResult customerValidator  = validateCustomer(customer, login.getPassword());
-        if(customerValidator == ValidationResult.VALID) {
+        CustomerValidationResult customerValidator  = validateCustomer(customer, login.getPassword());
+        if(customerValidator == VALID) {
             assert customer != null;
             return CustomerDto.mapCustomerToCustomerDto(customer);
         }
@@ -132,7 +140,7 @@ public class TrianelServiceImpl implements ITrianelService<CustomerDto> {
         return findCustomerByEmail(email).isPresent();
     }
 
-    private ValidationResult validateCustomer(Customer customer, String password) {
+    private CustomerValidationResult validateCustomer(Customer customer, String password) {
         return CustomerValidator.customerExists()
                 .and(CustomerValidator.isCustomerPasswordValid(password))
                 .and(CustomerValidator.isCustomerActive())

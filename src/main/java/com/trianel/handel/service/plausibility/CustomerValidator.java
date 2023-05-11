@@ -4,10 +4,10 @@ import com.trianel.handel.model.Customer;
 
 import java.util.function.Function;
 
-import static com.trianel.handel.service.plausibility.ValidationResult.*;
+import static com.trianel.handel.service.plausibility.CustomerValidationResult.*;
 
 
-public interface CustomerValidator extends Function<Customer, ValidationResult> {
+public interface CustomerValidator extends Function<Customer, CustomerValidationResult> {
 
     static CustomerValidator findCustomerByID(String customerId) {
         return customer -> customer != null && customerId.equals(customer.getCustomerId()) ? VALID : CUSTOMER_NOT_FOUND_BY_ID;
@@ -30,13 +30,14 @@ public interface CustomerValidator extends Function<Customer, ValidationResult> 
     }
 
     static CustomerValidator customerEmailAlreadyInUser(String email) {
-        return customer -> !customer.getEmail().equalsIgnoreCase(email) ? VALID : CUSTOMER_EMAIL_ALREADY_IN_USE;
+        return customer -> customer != null && customer.getEmail().equalsIgnoreCase(email) ?
+                VALID : CUSTOMER_EMAIL_ALREADY_IN_USE;
     }
 
     default CustomerValidator and(CustomerValidator other) {
         return employee -> {
-            ValidationResult result = this.apply(employee);
-            return result.equals(ValidationResult.VALID) ? other.apply(employee) : result;
+            CustomerValidationResult result = this.apply(employee);
+            return result.equals(CustomerValidationResult.VALID) ? other.apply(employee) : result;
         };
     }
 }

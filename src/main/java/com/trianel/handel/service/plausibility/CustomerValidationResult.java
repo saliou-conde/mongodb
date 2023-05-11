@@ -1,6 +1,6 @@
 package com.trianel.handel.service.plausibility;
 
-public enum ValidationResult {
+public enum CustomerValidationResult {
 
     VALID("Customer Valid"),
     CUSTOMER_NOT_EXISTS("Customer not found"),
@@ -12,7 +12,7 @@ public enum ValidationResult {
 
     private String description;
 
-     ValidationResult(String description) {
+     CustomerValidationResult(String description) {
          this.description = description;
     }
 

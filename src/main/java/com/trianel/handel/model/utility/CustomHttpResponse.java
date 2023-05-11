@@ -2,7 +2,7 @@ package com.trianel.handel.model.utility;
 
 import com.fasterxml.jackson.annotation.JsonFormat;
 import com.fasterxml.jackson.annotation.JsonProperty;
-import com.trianel.handel.model.dto.CustomerDto;
+import com.trianel.handel.model.dto.customer.CustomerDto;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;

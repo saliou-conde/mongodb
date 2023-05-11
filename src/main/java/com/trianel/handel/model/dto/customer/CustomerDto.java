@@ -1,4 +1,4 @@
-package com.trianel.handel.model.dto;
+package com.trianel.handel.model.dto.customer;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.trianel.handel.model.utility.Address;
