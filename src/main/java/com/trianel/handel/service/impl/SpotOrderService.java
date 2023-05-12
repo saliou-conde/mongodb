@@ -6,8 +6,8 @@ import com.trianel.handel.model.dto.spotOrder.SpotOrderDto;
 import com.trianel.handel.repository.CustomerRepository;
 import com.trianel.handel.repository.SpotOrderRepository;
 import com.trianel.handel.service.ITrianelService;
-import com.trianel.handel.service.plausibility.alert.SpotOrderValidationResult;
-import com.trianel.handel.service.plausibility.customer.CustomerValidationResult;
+import com.trianel.handel.service.plausibility.order.SpotOrderValidation;
+import com.trianel.handel.service.plausibility.customer.CustomerValidation;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
@@ -15,11 +15,12 @@ import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collectors;
 
+import static com.trianel.handel.model.dto.customer.CustomerDto.sanitize;
 import static com.trianel.handel.model.dto.spotOrder.SpotOrderDto.mapSpotOrderDtoToSpotOrder;
 import static com.trianel.handel.model.dto.spotOrder.SpotOrderDto.mapSpotOrderToSpotOrderDto;
-import static com.trianel.handel.service.plausibility.alert.SpotOrderValidationResult.SPOT_ORDER_VALID;
-import static com.trianel.handel.service.plausibility.alert.SpotOrderValidator.isSpotOrderTimeout;
-import static com.trianel.handel.service.plausibility.customer.CustomerValidationResult.VALID;
+import static com.trianel.handel.service.plausibility.order.SpotOrderValidation.SPOT_ORDER_VALID;
+import static com.trianel.handel.service.plausibility.order.SpotOrderValidator.isSpotOrderTimeout;
+import static com.trianel.handel.service.plausibility.customer.CustomerValidation.VALID;
 import static com.trianel.handel.service.plausibility.customer.CustomerValidator.customerExists;
 
 @Service
@@ -33,19 +34,20 @@ public class SpotOrderService implements ITrianelService<SpotOrderDto> {
     public SpotOrderDto addEntity(SpotOrderDto spotOrder) {
         String customerId = spotOrder.getCustomer().getCustomerId();
 
-        Optional<Customer> optionalCustomer                 = customerRepository.findCustomerByCustomerId(customerId);
-        CustomerValidationResult customerValidationResult   = customerExists().apply(optionalCustomer.orElse(null));
-        if(customerValidationResult == VALID) {
-            spotOrder.setCustomer(optionalCustomer.get());
-            SpotOrder order = mapSpotOrderToSpotOrderDto(spotOrder);
-            SpotOrderValidationResult spotOrderValidator = isSpotOrderTimeout().apply(order);
-            if(spotOrderValidator == SPOT_ORDER_VALID) {
+        Optional<Customer> optionalCustomer     = customerRepository.findCustomerByCustomerId(customerId);
+        CustomerValidation customerValidation   = customerExists().apply(optionalCustomer.orElse(null));
+        if(customerValidation == VALID) {
+            Customer customer = sanitize(optionalCustomer.get());
+            spotOrder.setCustomer(customer);
+            SpotOrder order                         = mapSpotOrderToSpotOrderDto(spotOrder);
+            SpotOrderValidation orderValidation     = isSpotOrderTimeout().apply(order);
+            if(orderValidation == SPOT_ORDER_VALID) {
                 SpotOrder insert = spotOrderRepository.save(order);
                 return mapSpotOrderDtoToSpotOrder(insert);
             }
-            throw new RuntimeException(spotOrderValidator.getDescription());
+            throw new RuntimeException(orderValidation.getDescription());
         }
-        throw new RuntimeException(customerValidationResult.getDescription());
+        throw new RuntimeException(customerValidation.getDescription());
     }
 
     @Override

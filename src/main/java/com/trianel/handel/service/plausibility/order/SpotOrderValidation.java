@@ -1,6 +1,6 @@
-package com.trianel.handel.service.plausibility.alert;
+package com.trianel.handel.service.plausibility.order;
 
-public enum SpotOrderValidationResult {
+public enum SpotOrderValidation {
 
     SPOT_ORDER_VALID("SpotOder Valid"),
     SPOT_ORDER_NOT_POSSIBLE("SpotOrder not possible, due timeout: 13:30");
@@ -8,7 +8,7 @@ public enum SpotOrderValidationResult {
 
     private String description;
 
-    SpotOrderValidationResult(String description) {
+    SpotOrderValidation(String description) {
         this.description = description;
     }
 

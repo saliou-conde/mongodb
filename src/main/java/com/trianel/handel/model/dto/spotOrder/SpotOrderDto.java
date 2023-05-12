@@ -15,27 +15,27 @@ import java.time.LocalDateTime;
 @NoArgsConstructor
 public class SpotOrderDto {
 
-    private Long orderId;
+    private String orderId;
     private Double quantity;
-    private LocalDateTime timestamp;
+    private LocalDateTime createdAt;
     private Customer customer;
 
     public static SpotOrderDto mapSpotOrderDtoToSpotOrder(SpotOrder spotOrder) {
         return SpotOrderDto.builder()
                 .orderId(spotOrder.getOrderId())
                 .quantity(spotOrder.getQuantity())
-                .timestamp(LocalDateTime.now())
+                .createdAt(LocalDateTime.now())
                 .customer(spotOrder.getCustomer())
                 .build();
     }
 
 
     public static SpotOrder mapSpotOrderToSpotOrderDto(SpotOrderDto spotOrder) {
-        boolean isTimestampNull = spotOrder.timestamp == null;
+        boolean isTimestampNull = spotOrder.createdAt == null;
         return SpotOrder.builder()
                 .orderId(spotOrder.getOrderId())
                 .quantity(spotOrder.getQuantity())
-                .timestamp(isTimestampNull ? LocalDateTime.now() : spotOrder.timestamp)
+                .createdAt(isTimestampNull ? LocalDateTime.now() : spotOrder.createdAt)
                 .customer(spotOrder.getCustomer())
                 .build();
     }

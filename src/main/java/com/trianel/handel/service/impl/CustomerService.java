@@ -6,7 +6,7 @@ import com.trianel.handel.model.dto.customer.LoginDto;
 import com.trianel.handel.repository.CustomerRepository;
 import com.trianel.handel.service.ITrianelService;
 import com.trianel.handel.service.plausibility.customer.CustomerValidator;
-import com.trianel.handel.service.plausibility.customer.CustomerValidationResult;
+import com.trianel.handel.service.plausibility.customer.CustomerValidation;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.domain.Page;
@@ -23,7 +23,7 @@ import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collectors;
 
-import static com.trianel.handel.service.plausibility.customer.CustomerValidationResult.VALID;
+import static com.trianel.handel.service.plausibility.customer.CustomerValidation.VALID;
 
 @Service
 @RequiredArgsConstructor
@@ -41,7 +41,7 @@ public class CustomerService implements ITrianelService<CustomerDto> {
     @Override
     public CustomerDto addEntity(CustomerDto requestDTO) {
         Customer customer               = requestDTO.mapCustomerDtoToCustomer(requestDTO);
-        CustomerValidationResult apply  = CustomerValidator
+        CustomerValidation apply  = CustomerValidator
                 .isCustomerEmailValid()
                 .apply(customer);
         log.info("ValidationResult: {}", apply);
@@ -64,7 +64,7 @@ public class CustomerService implements ITrianelService<CustomerDto> {
     @Override
     public CustomerDto updateEntity(Object object, CustomerDto requestDTO) {
         Customer customer      = requestDTO.mapCustomerDtoToCustomer(requestDTO);
-        CustomerValidationResult apply = CustomerValidator
+        CustomerValidation apply = CustomerValidator
                 .findCustomerByID(object.toString())
                 .and(CustomerValidator.isCustomerEmailValid())
                 .apply(customer);
@@ -91,7 +91,7 @@ public class CustomerService implements ITrianelService<CustomerDto> {
     public CustomerDto authenticate(LoginDto login) {
         String email = login.getUsername();
         Customer customer                   = findCustomerByEmail(email).orElse(null);
-        CustomerValidationResult customerValidator  = validateCustomer(customer, login.getPassword());
+        CustomerValidation customerValidator  = validateCustomer(customer, login.getPassword());
         if(customerValidator == VALID) {
             assert customer != null;
             return CustomerDto.mapCustomerToCustomerDto(customer);
@@ -140,7 +140,7 @@ public class CustomerService implements ITrianelService<CustomerDto> {
         return findCustomerByEmail(email).isPresent();
     }
 
-    private CustomerValidationResult validateCustomer(Customer customer, String password) {
+    private CustomerValidation validateCustomer(Customer customer, String password) {
         return CustomerValidator.customerExists()
                 .and(CustomerValidator.isCustomerPasswordValid(password))
                 .and(CustomerValidator.isCustomerActive())

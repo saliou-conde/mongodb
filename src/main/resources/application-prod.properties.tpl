@@ -1,6 +1,6 @@
 spring.data.mongodb.authentication-database=admin
-spring.data.mongodb.username=db_password
-spring.data.mongodb.password=19A12iou#
+spring.data.mongodb.username=${db_username}
+spring.data.mongodb.password=${db_password}
 spring.data.mongodb.database=mongo
 spring.data.mongodb.port=27017
 spring.data.mongodb.host=localhost

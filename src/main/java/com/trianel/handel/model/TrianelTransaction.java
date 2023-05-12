@@ -1,9 +1,6 @@
 package com.trianel.handel.model;
 
-import jakarta.persistence.CascadeType;
-import jakarta.persistence.JoinColumn;
-import jakarta.persistence.ManyToOne;
-import jakarta.persistence.OneToOne;
+import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
@@ -11,7 +8,6 @@ import lombok.NoArgsConstructor;
 import org.hibernate.annotations.OnDelete;
 import org.hibernate.annotations.OnDeleteAction;
 import org.springframework.data.mongodb.core.mapping.Document;
-import org.springframework.data.mongodb.core.mapping.Field;
 
 @Data
 @Builder
@@ -20,8 +16,9 @@ import org.springframework.data.mongodb.core.mapping.Field;
 @NoArgsConstructor
 public class TrianelTransaction {
 
-    @Field("transactionId")
-    private Long transactionId;
+    @Id
+    @GeneratedValue(strategy = GenerationType.UUID)
+    private String transactionId;
     private Double quantity;
     private Double price;
 

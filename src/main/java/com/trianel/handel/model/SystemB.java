@@ -1,5 +1,7 @@
 package com.trianel.handel.model;
 
+import jakarta.persistence.GeneratedValue;
+import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -17,6 +19,7 @@ import java.util.List;
 public class SystemB {
 
     @Id
+    @GeneratedValue(strategy = GenerationType.UUID)
     private String systemBID;
     private String name;
     private List<SpotOrder> spotOrders;

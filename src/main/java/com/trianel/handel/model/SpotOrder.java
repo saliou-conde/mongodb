@@ -8,7 +8,6 @@ import lombok.NoArgsConstructor;
 import org.hibernate.annotations.OnDelete;
 import org.hibernate.annotations.OnDeleteAction;
 import org.springframework.data.mongodb.core.mapping.Document;
-import org.springframework.data.mongodb.core.mapping.Field;
 
 import java.time.LocalDateTime;
 
@@ -19,12 +18,13 @@ import java.time.LocalDateTime;
 @NoArgsConstructor
 public class SpotOrder {
 
-    @Field("orderId")
-    private Long orderId;
+    @Id
+    @GeneratedValue(strategy = GenerationType.UUID)
+    private String orderId;
     @Column(nullable = false)
     private Double quantity;
     @Column(nullable = false)
-    private LocalDateTime timestamp;
+    private LocalDateTime createdAt;
 
     @ManyToOne(
             cascade = CascadeType.REMOVE

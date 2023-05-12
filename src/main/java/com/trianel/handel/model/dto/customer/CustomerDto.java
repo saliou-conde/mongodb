@@ -42,10 +42,10 @@ public class CustomerDto {
                 .build();
     }
 
-    public Customer mapCustomerDtoToCustomer(CustomerDto requestDTO) {
+    public static Customer mapCustomerDtoToCustomer(CustomerDto requestDTO) {
         Customer customer = Customer
                 .builder()
-                .customerId(customerId == null ? UUID.randomUUID().toString() : customerId)
+                .customerId(requestDTO.customerId == null ? UUID.randomUUID().toString() : requestDTO.customerId)
                 .address(requestDTO.address)
                 .email(requestDTO.email)
                 .gender(requestDTO.gender)
@@ -57,5 +57,20 @@ public class CustomerDto {
                 .build();
 
         return customer;
+    }
+
+    public static Customer sanitize(Customer customer) {
+        return Customer
+                .builder()
+                .customerId(customer.getCustomerId())
+                .address(customer.getAddress())
+                .email("")
+                .gender(customer.getGender())
+                .firstname(customer.getFirstname())
+                .lastname(customer.getLastname())
+                .active(customer.getActive())
+                .password(customer.getPassword())
+                .age(customer.getAge())
+                .build();
     }
 }

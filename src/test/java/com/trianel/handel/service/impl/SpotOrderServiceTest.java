@@ -31,9 +31,9 @@ class SpotOrderServiceTest {
 
         spotOrderDto = SpotOrderDto
                 .builder()
-                .quantity(200.0)
+                .quantity(200.0 + Math.random()*100 + 2*Math.random()*100)
                 .customer(customer)
-                .timestamp(LocalDateTime.now().plusDays(1))
+                .createdAt(LocalDateTime.now().plusDays(3))
                 .build();
 
         return;
