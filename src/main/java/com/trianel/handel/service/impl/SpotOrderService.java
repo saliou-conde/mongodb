@@ -24,7 +24,7 @@ import static com.trianel.handel.model.dto.spotOrder.SpotOrderDto.mapSpotOrderTo
 import static com.trianel.handel.service.plausibility.customer.CustomerValidation.VALID;
 import static com.trianel.handel.service.plausibility.customer.CustomerValidator.customerExists;
 import static com.trianel.handel.service.plausibility.order.SpotOrderValidation.SPOT_ORDER_VALID;
-import static com.trianel.handel.service.plausibility.order.SpotOrderValidator.findSpotOrderByID;
+import static com.trianel.handel.service.plausibility.order.SpotOrderValidator.findSpotOrderByOrderID;
 import static com.trianel.handel.service.plausibility.order.SpotOrderValidator.isSpotOrderTimeout;
 
 @Service
@@ -57,11 +57,11 @@ public class SpotOrderService implements ITrianelService<SpotOrderDto> {
 
     @Override
     public SpotOrderDto updateEntity(Object o, SpotOrderDto entity) {
-        SpotOrder spotOrder = mapSpotOrderToSpotOrderDto(entity);
-        SpotOrderValidation orderValidation = findSpotOrderByID(entity.getOrderId()).apply(spotOrder);
+        SpotOrder spotOrder                     = mapSpotOrderToSpotOrderDto(entity);
+        SpotOrderValidation orderValidation     = findSpotOrderByOrderID(entity.getOrderId()).apply(spotOrder);
         if(orderValidation == SPOT_ORDER_VALID) {
-            SpotOrder insert = spotOrderRepository.save(spotOrder);
-            return mapSpotOrderDtoToSpotOrder(insert);
+            SpotOrder update = spotOrderRepository.save(spotOrder);
+            return mapSpotOrderDtoToSpotOrder(update);
         }
         throw new SpotOrderServiceException(orderValidation.getDescription());
     }

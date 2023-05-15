@@ -6,8 +6,7 @@ import java.time.LocalDateTime;
 import java.time.LocalTime;
 import java.util.function.Function;
 
-import static com.trianel.handel.service.plausibility.order.SpotOrderValidation.SPOT_ORDER_NOT_POSSIBLE;
-import static com.trianel.handel.service.plausibility.order.SpotOrderValidation.SPOT_ORDER_VALID;
+import static com.trianel.handel.service.plausibility.order.SpotOrderValidation.*;
 import static java.time.temporal.ChronoUnit.DAYS;
 
 public interface SpotOrderValidator extends Function<SpotOrder, SpotOrderValidation> {
@@ -29,8 +28,8 @@ public interface SpotOrderValidator extends Function<SpotOrder, SpotOrderValidat
         };
     }
 
-    static SpotOrderValidator findSpotOrderByID(String customerId) {
-        return spotOrder -> spotOrder != null && customerId.equals(spotOrder.getOrderId()) ? SPOT_ORDER_VALID : SPOT_ORDER_NOT_POSSIBLE;
+    static SpotOrderValidator findSpotOrderByOrderID(String customerId) {
+        return spotOrder -> spotOrder != null && customerId.equals(spotOrder.getOrderId()) ? SPOT_ORDER_VALID : SPOT_ORDER_NOT_FOUND_BY_ID;
     }
 
     default SpotOrderValidator and(SpotOrderValidator other) {
