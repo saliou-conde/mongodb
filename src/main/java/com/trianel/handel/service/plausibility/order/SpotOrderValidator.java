@@ -11,7 +11,7 @@ import static java.time.temporal.ChronoUnit.DAYS;
 
 public interface SpotOrderValidator extends Function<SpotOrder, SpotOrderValidation> {
 
-    int TIMEOUT = 1331;
+    int TIMEOUT = 1330;
 
     static SpotOrderValidator isSpotOrderTimeout() {
         return spotOrder -> {
