@@ -11,6 +11,7 @@ import com.trianel.handel.service.exception.service.SpotOrderServiceException;
 import com.trianel.handel.service.plausibility.order.SpotOrderValidation;
 import com.trianel.handel.service.plausibility.customer.CustomerValidation;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -27,6 +28,7 @@ import static com.trianel.handel.service.plausibility.customer.CustomerValidator
 
 @Service
 @RequiredArgsConstructor
+@Slf4j
 public class SpotOrderService implements ITrianelService<SpotOrderDto> {
     
     private final CustomerRepository customerRepository;
@@ -64,7 +66,12 @@ public class SpotOrderService implements ITrianelService<SpotOrderDto> {
 
     @Override
     public Boolean deleteEntity(Object o) {
-        return null;
+        if(spotOrderExistsByID(o)) {
+            spotOrderRepository.deleteById(o.toString());
+            log.info("Customer deleted successfully");
+            return  Boolean.TRUE;
+        }
+        return Boolean.FALSE;
     }
 
     private List<SpotOrderDto> mapCustomerToCustomerDto(List<SpotOrder> spotOrders) {
@@ -72,5 +79,11 @@ public class SpotOrderService implements ITrianelService<SpotOrderDto> {
                 .stream()
                 .map(SpotOrderDto::mapSpotOrderDtoToSpotOrder)
                 .collect(Collectors.toList());
+    }
+
+    private boolean spotOrderExistsByID(Object o) {
+        String orderId = o.toString();
+        Optional<SpotOrder> findByCustomerId = spotOrderRepository.findSpotOrderByOrderId(orderId);
+        return findByCustomerId.isPresent();
     }
 }
