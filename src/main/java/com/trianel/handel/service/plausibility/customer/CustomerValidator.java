@@ -30,7 +30,7 @@ public interface CustomerValidator extends Function<Customer, CustomerValidation
     }
 
     static CustomerValidator customerEmailAlreadyInUser(String email) {
-        return customer -> customer != null && customer.getEmail().equalsIgnoreCase(email) ?
+        return customer -> customer != null && !customer.getEmail().equalsIgnoreCase(email) ?
                 VALID : CUSTOMER_EMAIL_ALREADY_IN_USE;
     }
 
