@@ -29,6 +29,10 @@ public interface SpotOrderValidator extends Function<SpotOrder, SpotOrderValidat
         };
     }
 
+    static SpotOrderValidator findSpotOrderByID(String customerId) {
+        return spotOrder -> spotOrder != null && customerId.equals(spotOrder.getOrderId()) ? SPOT_ORDER_VALID : SPOT_ORDER_NOT_POSSIBLE;
+    }
+
     default SpotOrderValidator and(SpotOrderValidator other) {
         return spotOrder -> {
             SpotOrderValidation result = this.apply(spotOrder);

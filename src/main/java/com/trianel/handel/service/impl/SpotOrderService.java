@@ -8,8 +8,8 @@ import com.trianel.handel.repository.SpotOrderRepository;
 import com.trianel.handel.service.ITrianelService;
 import com.trianel.handel.service.exception.service.CustomerServiceException;
 import com.trianel.handel.service.exception.service.SpotOrderServiceException;
-import com.trianel.handel.service.plausibility.order.SpotOrderValidation;
 import com.trianel.handel.service.plausibility.customer.CustomerValidation;
+import com.trianel.handel.service.plausibility.order.SpotOrderValidation;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
@@ -21,10 +21,11 @@ import java.util.stream.Collectors;
 import static com.trianel.handel.model.dto.customer.CustomerDto.sanitize;
 import static com.trianel.handel.model.dto.spotOrder.SpotOrderDto.mapSpotOrderDtoToSpotOrder;
 import static com.trianel.handel.model.dto.spotOrder.SpotOrderDto.mapSpotOrderToSpotOrderDto;
-import static com.trianel.handel.service.plausibility.order.SpotOrderValidation.SPOT_ORDER_VALID;
-import static com.trianel.handel.service.plausibility.order.SpotOrderValidator.isSpotOrderTimeout;
 import static com.trianel.handel.service.plausibility.customer.CustomerValidation.VALID;
 import static com.trianel.handel.service.plausibility.customer.CustomerValidator.customerExists;
+import static com.trianel.handel.service.plausibility.order.SpotOrderValidation.SPOT_ORDER_VALID;
+import static com.trianel.handel.service.plausibility.order.SpotOrderValidator.findSpotOrderByID;
+import static com.trianel.handel.service.plausibility.order.SpotOrderValidator.isSpotOrderTimeout;
 
 @Service
 @RequiredArgsConstructor
@@ -56,7 +57,13 @@ public class SpotOrderService implements ITrianelService<SpotOrderDto> {
 
     @Override
     public SpotOrderDto updateEntity(Object o, SpotOrderDto entity) {
-        return null;
+        SpotOrder spotOrder = mapSpotOrderToSpotOrderDto(entity);
+        SpotOrderValidation orderValidation = findSpotOrderByID(entity.getOrderId()).apply(spotOrder);
+        if(orderValidation == SPOT_ORDER_VALID) {
+            SpotOrder insert = spotOrderRepository.save(spotOrder);
+            return mapSpotOrderDtoToSpotOrder(insert);
+        }
+        throw new SpotOrderServiceException(orderValidation.getDescription());
     }
 
     @Override
