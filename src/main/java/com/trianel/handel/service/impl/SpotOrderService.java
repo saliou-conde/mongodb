@@ -6,6 +6,8 @@ import com.trianel.handel.model.dto.spotOrder.SpotOrderDto;
 import com.trianel.handel.repository.CustomerRepository;
 import com.trianel.handel.repository.SpotOrderRepository;
 import com.trianel.handel.service.ITrianelService;
+import com.trianel.handel.service.exception.service.CustomerServiceException;
+import com.trianel.handel.service.exception.service.SpotOrderServiceException;
 import com.trianel.handel.service.plausibility.order.SpotOrderValidation;
 import com.trianel.handel.service.plausibility.customer.CustomerValidation;
 import lombok.RequiredArgsConstructor;
@@ -31,7 +33,7 @@ public class SpotOrderService implements ITrianelService<SpotOrderDto> {
     private final SpotOrderRepository spotOrderRepository;
     
     @Override
-    public SpotOrderDto addEntity(SpotOrderDto spotOrder) {
+    public SpotOrderDto addEntity(SpotOrderDto spotOrder){
         String customerId = spotOrder.getCustomer().getCustomerId();
 
         Optional<Customer> optionalCustomer     = customerRepository.findCustomerByCustomerId(customerId);
@@ -45,9 +47,9 @@ public class SpotOrderService implements ITrianelService<SpotOrderDto> {
                 SpotOrder insert = spotOrderRepository.save(order);
                 return mapSpotOrderDtoToSpotOrder(insert);
             }
-            throw new RuntimeException(orderValidation.getDescription());
+            throw new SpotOrderServiceException(orderValidation.getDescription());
         }
-        throw new RuntimeException(customerValidation.getDescription());
+        throw new CustomerServiceException(customerValidation.getDescription());
     }
 
     @Override

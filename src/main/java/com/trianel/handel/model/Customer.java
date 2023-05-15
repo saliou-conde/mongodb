@@ -3,11 +3,12 @@ package com.trianel.handel.model;
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.trianel.handel.model.utility.Gender;
 import com.trianel.handel.model.utility.Address;
+import jakarta.persistence.Column;
+import jakarta.persistence.Id;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
-import org.springframework.data.annotation.Id;
 import org.springframework.data.mongodb.core.index.Indexed;
 import org.springframework.data.mongodb.core.mapping.Document;
 
@@ -28,7 +29,9 @@ public class Customer {
     private Gender gender;
     private Address address;
     private Boolean active;
+    @Column(nullable = false)
     private String password;
+    @Column(nullable = false)
     private Integer age;
 
 }

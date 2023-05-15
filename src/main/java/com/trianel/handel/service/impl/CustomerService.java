@@ -5,6 +5,7 @@ import com.trianel.handel.model.dto.customer.CustomerDto;
 import com.trianel.handel.model.dto.customer.LoginDto;
 import com.trianel.handel.repository.CustomerRepository;
 import com.trianel.handel.service.ITrianelService;
+import com.trianel.handel.service.exception.service.CustomerServiceException;
 import com.trianel.handel.service.plausibility.customer.CustomerValidator;
 import com.trianel.handel.service.plausibility.customer.CustomerValidation;
 import lombok.RequiredArgsConstructor;
@@ -51,14 +52,14 @@ public class CustomerService implements ITrianelService<CustomerDto> {
             if(customerByEmail.isPresent()) {
                 apply = CustomerValidator.customerEmailAlreadyInUser(email).apply(customerByEmail.get());
                 if(apply != VALID) {
-                    throw new RuntimeException(apply.getDescription());
+                    throw new CustomerServiceException(apply.getDescription());
                 }
             }
             assert customer != null;
             Customer insert = repository.insert(customer);
             return CustomerDto.mapCustomerToCustomerDto(insert);
         }
-        throw new RuntimeException(apply.getDescription());
+        throw new CustomerServiceException(apply.getDescription());
     }
 
     @Override
@@ -74,7 +75,7 @@ public class CustomerService implements ITrianelService<CustomerDto> {
             Customer insert = repository.save(customer);
             return CustomerDto.mapCustomerToCustomerDto(insert);
         }
-        throw new RuntimeException(apply.getDescription());
+        throw new CustomerServiceException(apply.getDescription());
     }
 
     @Override
@@ -90,13 +91,13 @@ public class CustomerService implements ITrianelService<CustomerDto> {
     @Override
     public CustomerDto authenticate(LoginDto login) {
         String email = login.getUsername();
-        Customer customer                   = findCustomerByEmail(email).orElse(null);
-        CustomerValidation customerValidator  = validateCustomer(customer, login.getPassword());
+        Customer customer                       = findCustomerByEmail(email).orElse(null);
+        CustomerValidation customerValidator    = validateCustomer(customer, login.getPassword());
         if(customerValidator == VALID) {
             assert customer != null;
             return CustomerDto.mapCustomerToCustomerDto(customer);
         }
-        throw new IllegalStateException(customerValidator.name());
+        throw new CustomerServiceException(customerValidator.name());
     }
 
     @Override

@@ -8,6 +8,7 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 
 import java.time.LocalDateTime;
+import java.util.UUID;
 
 @Data
 @Builder
@@ -32,11 +33,12 @@ public class SpotOrderDto {
 
     public static SpotOrder mapSpotOrderToSpotOrderDto(SpotOrderDto spotOrder) {
         boolean isTimestampNull = spotOrder.createdAt == null;
-        return SpotOrder.builder()
-                .orderId(spotOrder.getOrderId())
+        SpotOrder order = SpotOrder.builder()
+                .orderId(UUID.randomUUID().toString())
                 .quantity(spotOrder.getQuantity())
                 .createdAt(isTimestampNull ? LocalDateTime.now() : spotOrder.createdAt)
                 .customer(spotOrder.getCustomer())
                 .build();
+        return order;
     }
 }

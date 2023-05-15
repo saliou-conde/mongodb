@@ -21,7 +21,7 @@ class SpotOrderServiceTest {
     @Autowired
     private ITrianelService<SpotOrderDto> service;
     private SpotOrderDto spotOrderDto;
-    private String customerId = "9b5bec9e-2789-4e45-ae2f-dc72a69ef596";
+    private String customerId = "40ff08a1-e89c-4edc-a2aa-a7a926f9948c";
 
     @BeforeAll
     void setUp() {

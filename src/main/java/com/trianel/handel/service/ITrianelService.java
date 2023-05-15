@@ -20,7 +20,7 @@ public interface ITrianelService<T> {
         return null;
     }
 
-    default Page<T> searchCustomer(String name, Integer min, Integer max, String city, Pageable pageable) {
+    default Page<T> searchCustomer(String str1, Integer min, Integer max, String str2, Pageable pageable) {
         return null;
     }
 }
