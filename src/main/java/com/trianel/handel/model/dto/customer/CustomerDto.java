@@ -43,7 +43,7 @@ public class CustomerDto {
     }
 
     public static Customer mapCustomerDtoToCustomer(CustomerDto requestDTO) {
-        Customer customer = Customer
+        return Customer
                 .builder()
                 .customerId(requestDTO.customerId == null ? UUID.randomUUID().toString() : requestDTO.customerId)
                 .address(requestDTO.address)
@@ -55,8 +55,6 @@ public class CustomerDto {
                 .password(requestDTO.password)
                 .age(requestDTO.age)
                 .build();
-
-        return customer;
     }
 
     public static Customer sanitize(Customer customer) {

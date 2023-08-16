@@ -74,8 +74,6 @@ Basierend auf den Anforderungen des Händlers und des aktuellen Prozesses empfeh
 
 •	Informationen über die IT-Infrastruktur, auf der die Softwarelösung aufgebaut wird
 
-•	Welche Performance-Anforderungen gibt es?
-
 **Die wesentlichen Einflussfaktoren auf die Komplexität der Lösung sind:**
 
 •	Der Anzahl der Kunden und Bestellungen pro Tag

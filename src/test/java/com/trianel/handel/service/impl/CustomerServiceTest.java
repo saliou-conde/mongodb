@@ -16,7 +16,6 @@ import org.springframework.test.context.TestPropertySource;
 import java.util.List;
 
 import static org.assertj.core.api.AssertionsForClassTypes.assertThat;
-import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.fail;
 
 @SpringBootTest(classes = {TrianelHandelApplication.class})
@@ -75,7 +74,7 @@ class CustomerServiceTest {
             service.addEntity(customerDto);
             fail();
         } catch (CustomerServiceException e) {
-            assertEquals(expectedResult, e.getMessage());
+            assertThat(e.getMessage()).isEqualTo(expectedResult);
         }
         return;
     }
